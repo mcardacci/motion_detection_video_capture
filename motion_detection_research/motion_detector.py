@@ -47,32 +47,37 @@ while True:
 		continue
 
 	# Compute the absolute difference between the current frame and 'firstFrame'
+	# Larger frame deltas indicate that motion is taking place
 	frameDelta = cv2.absdiff(firstFrame, gray)
+	# Here we threshold the frame delta to reveal the regions of the image that only have significant changes in pixel intensity
+	# If the threshold is less than 25, we discard it and set it to black (background), else we set it to white (foreground)
 	thresh = cv2.threshold(frameDelta, 25, 255, cv2.THRESH_BINARY)[1]
  
 	# dilate the thresholded image to fill in holes, then find contours
 	# on thresholded image
 	thresh = cv2.dilate(thresh, None, iterations=2)
-	(_, cnts, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+	# Here we apply contour detection to find the outlines of these white regions
+	(_, cnts, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTE
 
 	# Loop over the contours
 	for c in cnts:
-		# if the contour is too small, ignore it
+		# if the contour is too small, ignore it bc they're irrelevant
 		if cv2.contourArea(c) < args["min_area"]:
 			continue
 
 		# Compute the bounding box for the counter, draw it on the frame and update the text
-		(x, y, w, h) = cv2.boundingRect(c)
-		cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2) 
-		text = "Occupied"
+<<<<<<< HEAD
+		(x, y, w, h)=cv2.boundingRect(c)
+		# If the contour area is larger than our supplied '--min-area', draw the box surrounding the foreground and motion region
+		cv2.rectangle(frame, (x,y), (x+w, y+h), (0, 255, 0), 2)
+		text="Occupied"
 
 	#draw the text and timestamp on the frame
-	cv2.putText(frame, "Room Status: {}".format(text), (10, 20),
-		cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-	cv2.putText(frame, datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p"),
-		(10, frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
- 
-	# show the frame and record if the user presses a key
+	cv2.putText(frame, "Room Status: {}".format(text), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 0), 2)
+	cv2.putText(frame, datetime.datetime.now().strftime("%A %d %B %Y %I %M:%S%p"), (10,frame.shape[0]-10), cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
+	
+	# Show the frame and record if the user presses a key
 	cv2.imshow("Security Feed", frame)
 	cv2.imshow("Thresh", thresh)
 	cv2.imshow("Frame Delta", frameDelta)
@@ -85,3 +90,6 @@ while True:
 # cleanup the camera and close any open windows
 camera.release()
 cv2.destroyAllWindows()
+
+# Example call:
+# python motion_detector.py --video videos/example_01.mp4

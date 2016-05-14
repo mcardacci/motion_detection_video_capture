@@ -31,4 +31,4 @@ if conf["use_dropbox"]:
 	# finish the authorization and grab the Dropbox client
 	(accessToken, userID)=flow.finish(authCode)
 	client=DropboxClient(accessToken)
-	print "[SUCCESS] dropbox account linked"asdf
+	print "[SUCCESS] dropbox account linked"

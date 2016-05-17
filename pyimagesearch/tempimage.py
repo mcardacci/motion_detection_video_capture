@@ -2,9 +2,9 @@ import uuid
 import os
 
 class TempImage():
-	def __init__(self, basePath="./", ext=".jpg"):
+	def __init__(self, basePath="C:\temp", ext=".jpg"):
 		# construct the file path
-		self.path="{base_path}/{rand}{ext}".format(base_path=basePath,
+		self.path="{base_path}\{rand}{ext}".format(base_path=basePath,
 			rand=str(uuid.uuid4()), ext=ext)
 
 		def cleanup(self):

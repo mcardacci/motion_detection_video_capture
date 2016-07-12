@@ -5,3 +5,5 @@
 ## High level Summary
 * Makes use of python's CV2 algorithms to compare frames.
 * Use image subtraction and averaging of pixels to detect motion.
+* Must have CV2 installed
+* Designed to run on Raspian but may run on other linux distros.
